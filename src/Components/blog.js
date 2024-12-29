@@ -2,10 +2,15 @@ import { useState } from "react";
 
 function Blog(){
 
-    const [title,setTitle] = useState("");
-    const [content,setContent] = useState("");
+    let [title,setTitle] = useState("");
+    let [content,setContent] = useState("");
+    const [blogs,setBlogs] = useState([]);
     function handleSubmit(e){
         e.preventDefault();
+        setBlogs([{title,content},...blogs]);
+        console.log(blogs);
+        setTitle("");
+        setContent("");
     }
     return(
         <>
@@ -29,8 +34,18 @@ function Blog(){
          </div>
          <hr/>
          <h2>Blogs</h2>
-         <h3>{title}</h3>
-         <h4>{content}</h4>
+         {/* <h3>{title}</h3>
+         <h4>{content}</h4> */}
+         {blogs.map((blog,i)=>{
+            return(
+                <div className="blog" key={i}>
+                <h3>{blog.title}</h3>
+                <p>{blog.content}</p>
+                </div>
+            )
+            
+            
+         })}
         </>
     );
 }
