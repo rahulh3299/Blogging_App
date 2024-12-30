@@ -1,4 +1,4 @@
-import { useState,useRef } from "react";
+import { useState,useRef,useEffect} from "react";
 
 function Blog(){
 
@@ -7,6 +7,9 @@ function Blog(){
     const [formData,setFormData] = useState({title:"",content:""});
     const [blogs,setBlogs] = useState([]);
     const titleRef = useRef(null);
+    useEffect(()=>{
+        titleRef.current.focus();
+    },[]);
     function handleSubmit(e){
         e.preventDefault();
         setBlogs([{title:formData.title,content:formData.content},...blogs]);
