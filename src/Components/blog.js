@@ -13,6 +13,9 @@ function Blog(){
         setFormData({title:"",content:""});
         
     }
+    function removeBlog(i){
+     setBlogs(blogs.filter((blog,index)=>i!==index))
+    }
     return(
         <>
          <h1>Write a Blog!</h1>
@@ -42,6 +45,7 @@ function Blog(){
                 <div className="blog" key={i}>
                 <h3>{blog.title}</h3>
                 <p>{blog.content}</p>
+                <button onClick={()=>removeBlog(i)} className="btn remove">Delete</button>
                 </div>
             )
             
