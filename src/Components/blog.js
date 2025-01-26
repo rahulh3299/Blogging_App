@@ -1,4 +1,6 @@
 import { useState,useRef,useEffect, useReducer} from "react";
+import { db } from "../firebaseInit";
+import { collection, addDoc ,getDocs} from "firebase/firestore"; 
 
 function blogsReducer(state,action){
   switch(action.type){
@@ -7,7 +9,7 @@ function blogsReducer(state,action){
     case "REMOVE":
         return state.filter((blog,index) => index !== action.index);
     default:
-        return [];
+        return [action.blog, ...state];
   }
 }
 
@@ -29,11 +31,34 @@ function Blog(){
             document.title = "No Blogs";
         }
     },[blogs]);
-    function handleSubmit(e){
+    useEffect(()=>{
+      async function fetchData(){
+        const querySnapshot = await getDocs(collection(db, "blogs"));
+        console.log(querySnapshot);
+        const blogs = querySnapshot.docs.map((doc)=>{
+            return {
+                id:doc.id,
+                ...doc.data()
+            }
+        });
+        console.log(blogs);
+        
+
+      }
+      fetchData();
+    },[]);
+    async function handleSubmit(e){
         e.preventDefault();
        // setBlogs([{title:formData.title,content:formData.content},...blogs]);
        dispatch({type:"ADD",blog:{title:formData.title,content:formData.content}});
         console.log(blogs);
+        const docRef = await addDoc(collection(db, "blogs"), {
+            title: formData.title,
+            content: formData.content,
+            createdOn: new Date()
+          });
+          console.log("Document written with ID: ", docRef.id);
+
         setFormData({title:"",content:""});
         titleRef.current.focus();
         
